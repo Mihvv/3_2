@@ -2,24 +2,27 @@
 <html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <title>Stacje NOAA</title>
+    <title>Datasets NOAA</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Stacje NOAA</h1>
-    <button id="loadBtn">Pobierz stacje</button>
+    <h1>Zestawy danych NOAA</h1>
+
+    <button id="loadBtn">Pobierz dataset-y</button>
     <span id="status"></span>
-    <table id="stationsTable">
+
+    <table id="datasetsTable">
       <thead>
         <tr>
-          <th>Station ID</th>
+          <th>ID</th>
           <th>Name</th>
-          <th>Latitude</th>
-          <th>Longitude</th>
+          <th>Min Date</th>
+          <th>Max Date</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+
     <script src="script.js"></script>
   </body>
 </html>

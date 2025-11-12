@@ -37,7 +37,10 @@ app.get("/stations", (req, res) => {
   const query = req.url.replace("/stations", "");
   proxyFetch(`/stations${query}`, res);
 });
-app.get("/datasets", (req, res) => proxyFetch("/datasets", res));
+app.get("/datasets", (req, res) => {
+  const query = req.url.replace("/datasets", "");
+  proxyFetch(`/datasets${query}`, res);
+});
 app.get("/data", (req, res) => {
   const query = req.url.replace("/data", ""); // zachowujemy parametry ?datasetid=...
   proxyFetch(`/data${query}`, res);
