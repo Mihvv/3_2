@@ -1,46 +1,54 @@
-document.getElementById("loadBtn").addEventListener("click", fetchDatasets);
+document.getElementById("dataForm").addEventListener("submit", fetchData);
 
-async function fetchDatasets() {
+async function fetchData(event) {
+  event.preventDefault();
+
   const status = document.getElementById("status");
-  const tableBody = document.querySelector("#datasetsTable tbody");
+  const tableBody = document.querySelector("#dataTable tbody");
 
   tableBody.innerHTML = "";
-  status.textContent = "Ładowanie danych";
+  status.textContent = "Ładowanie danych...";
 
-  const limit = 100;
+  const datasetid = document.getElementById("datasetid").value.trim();
+  const locationid = document.getElementById("locationid").value.trim();
+  const startdate = document.getElementById("startdate").value;
+  const enddate = document.getElementById("enddate").value;
+
+  if (!datasetid || !locationid || !startdate || !enddate) {
+    status.textContent = "Uzupełnij wszystkie pola w poprawnym formacie.";
+    return;
+  }
 
   try {
-    const response = await fetch(`http://localhost:5000/datasets?limit=${limit}`);
+    const response = await fetch(
+      `http://localhost:5000/data?datasetid=${encodeURIComponent(datasetid)}&locationid=${encodeURIComponent(locationid)}&startdate=${startdate}&enddate=${enddate}`
+    );
 
     if (!response.ok) {
       throw new Error(`Błąd pobierania: ${response.status}`);
     }
 
     const data = await response.json();
-    const datasets = data.results || [];
+    const results = data.results || [];
 
-    if (datasets.length === 0) {
+    if (results.length === 0) {
       status.textContent = "Brak danych.";
       return;
     }
 
-    const today = new Date();
-
-    datasets.forEach((ds) => {
+    results.forEach((item) => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
-        <td>${ds.id ?? "-"}</td>
-        <td>${ds.name ?? "-"}</td>
-        <td>${ds.mindate ?? "-"}</td>
-        <td>${ds.maxdate ?? "-"}</td>
+        <td>${item.date ?? "-"}</td>
+        <td>${item.datatype ?? "-"}</td>
+        <td>${item.value ?? "-"}</td>
       `;
       tableBody.appendChild(row);
     });
 
-    status.textContent = `Załadowano ${datasets.length} datasetów.`;
+    status.textContent = `Załadowano ${results.length} rekordów.`;
   } catch (error) {
-    console.error("Błąd:", error);
+    console.error(error);
     status.textContent = "Wystąpił błąd podczas pobierania danych.";
   }
 }
