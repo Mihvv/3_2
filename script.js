@@ -7,8 +7,10 @@ async function fetchStations() {
   tableBody.innerHTML = "";
   status.textContent = "Ładowanie danych...";
 
+  const limit = 100;
+
   try {
-    const response = await fetch("http://localhost:5000/stations");
+    const response = await fetch(`http://localhost:5000/stations?limit=${limit}`);
 
     if (!response.ok) {
       throw new Error(`Błąd pobierania: ${response.status}`);
